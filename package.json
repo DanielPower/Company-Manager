@@ -1,12 +1,10 @@
 {
-  "name": "ppsexpress",
+  "name": "Employee Manager",
   "version": "0.0.0",
   "scripts": {
     "build": "node build.js",
-    "lint": "tslint --project \"tsconfig.json\"",
     "start": "node -r module-alias/register ./dist --env=production",
-    "start:dev": "nodemon",
-    "test": "nodemon --config ./spec/nodemon.json"
+    "start:dev": "nodemon"
   },
   "nodemonConfig": {
     "watch": [
@@ -14,7 +12,7 @@
     ],
     "ext": "ts, html",
     "ignore": [
-      "src/public"
+      "src/client"
     ],
     "exec": "ts-node -r tsconfig-paths/register ./src"
   },
@@ -34,7 +32,11 @@
     "http-status-codes": "^2.1.2",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
-    "winston": "^3.3.3"
+    "pg": "^8.3.3",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.25",
+    "winston": "^3.3.3",
+    "zapatos": "^0.1.54"
   },
   "devDependencies": {
     "@types/command-line-args": "^5.0.0",
@@ -46,12 +48,15 @@
     "@types/jsonfile": "^6.0.0",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.6.4",
+    "@types/pg": "^7.14.4",
     "@types/supertest": "^2.0.10",
+    "eslint": "^7.8.1",
     "find": "^0.3.0",
     "fs-extra": "^9.0.1",
     "jasmine": "^3.6.1",
     "jsonfile": "^6.0.1",
     "nodemon": "^2.0.4",
+    "prettier": "^2.1.1",
     "supertest": "^4.0.2",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",

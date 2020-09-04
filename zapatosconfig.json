@@ -1,0 +1,15 @@
+{
+  "db": {
+    "connectionString": "postgresql://daniel:password@localhost/pphourtracking"
+  },
+  "outDir": "./src",
+  "srcMode": "copy",
+  "progressListener": false,
+  "warningListener": true,
+  "schemas": {
+    "public": {
+      "include": "*",
+      "exclude": ["_migration"]
+    }
+  }
+}
