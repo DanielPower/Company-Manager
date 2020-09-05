@@ -9,7 +9,7 @@
   let passwordInvalid = false;
 
   const submitLogin = () => {
-    axios.post("/authenticate", { username, password });
+    axios.post("/login", { username, password });
 
     console.log(username, password);
   }
