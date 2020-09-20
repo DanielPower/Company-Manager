@@ -2,8 +2,6 @@ BEGIN TRANSACTION;
 
 ALTER TABLE "shift"
     ADD COLUMN "employee_id" INT NOT NULL;
-ALTER TABLE "shift"
-    ADD COLUMN "night_shift" BOOLEAN NOT NULL;
 UPDATE "shift"
     SET employee_id = "pay_period".employee_id
     FROM "pay_period"

@@ -15,12 +15,6 @@
   let jobs = [];
   axios.get("/jobs").then(({ data }) => (jobs = data));
 
-  let username;
-  let usernameInvalid = false;
-
-  let password;
-  let passwordInvalid = false;
-
   let forms = [];
 
   const addForm = () => {

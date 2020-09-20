@@ -11,7 +11,8 @@
     SideNavLink,
     SideNavItems, SideNavMenu
   } from "carbon-components-svelte";
-  import { Login, PayPeriod } from "./pages";
+  import { Login, PayPeriod, CreateUser } from "./pages";
+import Manage from "./pages/Manage.svelte";
 
   let isSideNavOpen = false;
 </script>
@@ -27,19 +28,17 @@
     company="Company Name"
     href="/"
     platformName="Employee Management"
-    bind:isSideNavOpen>
-    <SideNav isOpen={isSideNavOpen}>
-      <SideNavItems>
-        <SideNavMenu text="Menu 1">
-          <SideNavLink text="Log out" />
-        </SideNavMenu>
-      </SideNavItems>
-    </SideNav>
-  </Header>
+    bind:isSideNavOpen/>
   <Route path="login">
     <Login />
   </Route>
+  <Route path="manage">
+    <Manage />
+  </Route>
   <Route path="payperiod">
     <PayPeriod />
+  </Route>
+  <Route path="createuser">
+    <CreateUser />
   </Route>
 </Router>

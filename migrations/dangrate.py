@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
 import psycopg2
 import yaml
+import sys
 
 
 def reset_database():
@@ -11,7 +13,7 @@ def reset_database():
         db = get_db(name="postgres")
         db.autocommit = True
         cursor = db.cursor()
-        database_name = "ppsmanager"
+        database_name = "companymanager"
         cursor.execute(f"""DROP DATABASE IF EXISTS "{database_name}";""")
         cursor.execute(f"""CREATE DATABASE "{database_name}";""")
         db.close()
@@ -48,7 +50,7 @@ def get_db(
     host="localhost",
     user="postgres",
     password="password",
-    name="ppsmanager",
+    name="companymanager",
 ):
     return psycopg2.connect(
         f"host={host} user={user} password={password} dbname={name}"
@@ -100,3 +102,17 @@ def set_current_migration(db, name):
         INSERT INTO "_migration" VALUES('{name}')
         """
     )
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "reset":
+            reset_database()
+            sys.exit()
+        elif sys.argv[1] == "upgrade":
+            upgrade_database()
+            sys.exit()
+        elif sys.argv[1] == "downgrade":
+            downgrade_database()
+            sys.exit()
+    print("Expected an argument, one of: upgrade, downgrade, reset")
