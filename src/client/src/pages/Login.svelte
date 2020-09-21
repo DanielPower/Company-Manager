@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import axios from "axios";
   import {
     Button,
@@ -8,11 +8,8 @@
     PasswordInput,
   } from "carbon-components-svelte";
 
-  let username: string;
-  let usernameInvalid = false;
-
-  let password: string;
-  let passwordInvalid = false;
+  let username;
+  let password;
 
   const submitLogin = () => {
     axios.post("/login", { username, password }).then((response) => {

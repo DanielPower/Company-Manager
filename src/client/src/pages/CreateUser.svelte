@@ -1,18 +1,17 @@
-<script lang="ts">
+<script>
   import axios from "axios";
   import {
     Button,
     Content,
     Form,
     TextInput,
-    PasswordInput,
     DatePicker,
     DatePickerInput,
   } from "carbon-components-svelte";
 
-  let employeeNumber: string;
-  let employeeName: string;
-  let startDate: string;
+  let employeeNumber;
+  let employeeName;
+  let startDate;
 
   const submitUser = () => {
     axios.post("/users", { employeeNumber, employeeName, startDate });

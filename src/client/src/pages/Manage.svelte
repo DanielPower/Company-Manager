@@ -5,11 +5,11 @@
     Content,
     Form,
     TextInput,
-DatePicker,
-DatePickerInput,
-Checkbox,
-DataTable,
-Dropdown,
+    DatePicker,
+    DatePickerInput,
+    Checkbox,
+    DataTable,
+    Dropdown,
   } from "carbon-components-svelte";
 
   let employees = [];
@@ -62,20 +62,6 @@ Dropdown,
   getEmployees();
   getJobs();
 </script>
-
-<style>
-  .login {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .submitButton {
-    margin-left: auto;
-    margin-right: 0px;
-  }
-</style>
 
 <Content>
   <h1>Employees</h1>
