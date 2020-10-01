@@ -1,6 +1,6 @@
 {
   "db": {
-    "connectionString": "postgresql://daniel:password@localhost/pphourtracking"
+    "connectionString": "postgresql://postgres:password@localhost/companymanager"
   },
   "outDir": "./src",
   "srcMode": "copy",
