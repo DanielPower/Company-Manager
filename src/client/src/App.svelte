@@ -1,12 +1,11 @@
 <script>
   import { Router, Route } from "svelte-routing";
-  import {
-    Header,
-  } from "carbon-components-svelte";
+  import { Header } from "carbon-components-svelte";
   import { Login, PayPeriod, CreateUser } from "./pages";
-import Manage from "./pages/Manage.svelte";
+  import Manage from "./pages/Manage.svelte";
 
   let isSideNavOpen = false;
+  document.documentElement.setAttribute("theme", "g10");
 </script>
 
 <Router url={window.location.pathname}>
@@ -14,7 +13,7 @@ import Manage from "./pages/Manage.svelte";
     company="Company Name"
     href="/"
     platformName="Employee Management"
-    bind:isSideNavOpen/>
+    bind:isSideNavOpen />
   <Route path="login">
     <Login />
   </Route>
