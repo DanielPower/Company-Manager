@@ -2,7 +2,6 @@ import { Router } from "express";
 import * as db from "../zapatos/src";
 import * as s from "../zapatos/schema";
 import { pool } from "../server";
-import { STATUS_CODES } from "http";
 
 // Add sub-routes
 const employeeRouter = Router();
@@ -17,7 +16,6 @@ employeeRouter.get("/", async (_request, response, _next) => {
 
 employeeRouter.post("/", async (request, response, _next) => {
   const { body } = request;
-  console.log(body);
   const newEmployee = {
     id: body.id,
     name: body.name,

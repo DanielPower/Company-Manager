@@ -15,7 +15,8 @@ jobRouter.get("/", async (_request, response, _next) => {
 });
 
 jobRouter.post("/", async (request, response, _next) => {
-  const { body } = request.body;
+  const { body } = request;
+  console.log(body);
   const newJob = {
     id: body.jobNumber,
     name: body.name,
