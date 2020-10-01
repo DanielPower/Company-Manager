@@ -1,34 +1,45 @@
 <script>
-  import { Router, Route, Link } from "svelte-routing";
-  import { Header, HeaderUtilities, HeaderActionSearch, HeaderAction, HeaderPanelLinks, HeaderPanelDivider, HeaderActionLink, Content } from "carbon-components-svelte";
-  import { Login } from "./pages";
-  let url="login";
+  import { Router, Route } from "svelte-routing";
+  import {
+    Header,
+    HeaderUtilities,
+    HeaderActionSearch,
+    HeaderNavMenu,
+    HeaderNavItem,
+    HeaderNav,
+    SideNav,
+    SideNavLink,
+    SideNavItems, SideNavMenu
+  } from "carbon-components-svelte";
+  import { Login, PayPeriod } from "./pages";
+
+  let isSideNavOpen = false;
 </script>
 
 <style>
-  .login {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
+
 </style>
 
-<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/carbon-components/css/carbon-components.min.css"
-  />
-</svelte:head>
+<svelte:head />
 
-<Router url={url}>
-  <Header company="Company Name" href="/" platformName="Employee Management">
-    <HeaderUtilities>
-      <HeaderActionSearch />
-    </HeaderUtilities>
+<Router url={window.location.pathname}>
+  <Header
+    company="Company Name"
+    href="/"
+    platformName="Employee Management"
+    bind:isSideNavOpen>
+    <SideNav isOpen={isSideNavOpen}>
+      <SideNavItems>
+        <SideNavMenu text="Menu 1">
+          <SideNavLink text="Log out" />
+        </SideNavMenu>
+      </SideNavItems>
+    </SideNav>
   </Header>
-    <Route path="login">
-      <Login/>
-    </Route>
-    <Route path="manage">
-    </Route>
+  <Route path="login">
+    <Login />
+  </Route>
+  <Route path="payperiod">
+    <PayPeriod />
+  </Route>
 </Router>

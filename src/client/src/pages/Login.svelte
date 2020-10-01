@@ -1,6 +1,12 @@
 <script lang="ts">
   import axios from "axios";
-  import { Button, Content, Form, TextInput, PasswordInput } from "carbon-components-svelte";
+  import {
+    Button,
+    Content,
+    Form,
+    TextInput,
+    PasswordInput,
+  } from "carbon-components-svelte";
 
   let username: string;
   let usernameInvalid = false;
@@ -9,10 +15,12 @@
   let passwordInvalid = false;
 
   const submitLogin = () => {
-    axios.post("/login", { username, password });
-
-    console.log(username, password);
-  }
+    axios.post("/login", { username, password }).then((response) => {
+      if (response.status === 200) {
+        window.location.href = '/';
+      }
+    });
+  };
 </script>
 
 <style>
