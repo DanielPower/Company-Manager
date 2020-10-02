@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as db from "../zapatos/src";
 import * as s from "../zapatos/schema";
 import { pool } from "../server";
+import bcrypt from "bcrypt";
 
 // Add sub-routes
 const employeeRouter = Router();
@@ -16,10 +17,12 @@ employeeRouter.get("/", async (_request, response, _next) => {
 
 employeeRouter.post("/", async (request, response, _next) => {
   const { body } = request;
+  const passwordHash = await bcrypt.hash("changeme", 10);
+
   const newEmployee = {
     id: body.id,
     name: body.name,
-    password_hash: "500",
+    password_hash: passwordHash,
     is_admin: body.isAdmin,
     start_date: body.startDate,
   };

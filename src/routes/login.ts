@@ -12,7 +12,13 @@ loginRouter.post("/", (req, res, next) => {
       res.writeHead(401, { "Content-Type": "application/json" });
       return res.end();
     }
-    res.writeHead(200, { "Content-Type": "application/json" });
+    req.logIn(user, (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log("login", req.user);
+      res.writeHead(200, { "Content-Type": "application/json" });
+    });
     return res.end();
   })(req, res, next);
 });

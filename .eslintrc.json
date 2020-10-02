@@ -14,6 +14,7 @@
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
+    "curly": ["error", "all"],
     "quotes": ["error", "double"],
     "semi": ["error", "always"]
   }

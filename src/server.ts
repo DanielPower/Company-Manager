@@ -5,6 +5,7 @@ import helmet from "helmet";
 import "reflect-metadata";
 
 import express, { Request, Response, NextFunction } from "express";
+import expressSession from "express-session";
 import { StatusCodes } from "http-status-codes";
 import "express-async-errors";
 
@@ -19,6 +20,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(
+  expressSession({
+    secret: "shush",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -30,6 +38,10 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log("user", req.user);
+  next();
+});
 app.use("/", BaseRouter);
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   logger.error(err.message, err);

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import axios from "axios";
   import {
     Button,
@@ -8,15 +8,17 @@
     PasswordInput,
   } from "carbon-components-svelte";
 
-  let username;
-  let password;
+  let username: string;
+  let password: string;
 
   const submitLogin = () => {
-    axios.post("/login", { username, password }).then((response) => {
-      if (response.status === 200) {
-        window.location.href = '/';
-      }
-    });
+    axios({
+      method: "post",
+      url: "/login", 
+      withCredentials: true, 
+      data: { username, password },
+      responseType: "json",
+    }).then((res) => console.log(res));
   };
 </script>
 

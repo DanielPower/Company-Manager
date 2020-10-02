@@ -55,7 +55,11 @@
   ];
 
   const getEmployees = () =>
-    axios.get("/employees").then(({ data }) => {
+    axios({
+      method: "get",
+      url: "/employees",
+      withCredentials: true,
+    }).then(({ data }) => {
       employees = data;
     });
 
