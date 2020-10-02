@@ -1,8 +1,8 @@
-import './env';
-import app from './server';
-import logger from './logger';
+import "./env";
+import app from "./server";
+import logger from "./logger";
 
 const port = Number(process.env.PORT || 3000);
 app.listen(port, () => {
-    logger.info('Express server started on port: ' + port);
+  logger.info("Express server started on port: " + port);
 });
