@@ -15,6 +15,18 @@ employeeRouter.get("/", async (_request, response, _next) => {
   response.send(employees);
 });
 
+employeeRouter.get("/current", async (request, response, _next) => {
+  if (!request.user) {
+    return response.status(403).send();
+  }
+  const [employee] = await db.sql<s.employee.SQL, s.employee.Selectable[]>`
+    SELECT ${"id"}, ${"name"}, ${"is_admin"}, ${"start_date"}
+    FROM ${"employee"}
+    WHERE ${"id"} = ${db.param((request.user as s.employee.Selectable).id)}
+    LIMIT 1`.run(pool);
+  response.json(employee);
+});
+
 employeeRouter.post("/", async (request, response, _next) => {
   const { body } = request;
   const passwordHash = await bcrypt.hash("changeme", 10);

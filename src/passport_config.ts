@@ -7,14 +7,14 @@ import bcrypt from "bcrypt";
 
 passport.serializeUser((user: s.employee.Selectable, done) => {
   console.log("serialize", user);
-  done(null, user.name);
+  done(null, user.id);
 });
 
-passport.deserializeUser((username: s.employee.Selectable, done) => {
+passport.deserializeUser((id: s.employee.Selectable, done) => {
   db.sql<s.employee.SQL, s.employee.Selectable[]>`
-  SELECT ${"name"} 
+  SELECT ${"id"} 
   FROM ${"employee"} 
-  WHERE ${"name"} = ${db.param(username)} 
+  WHERE ${"id"} = ${db.param(id)} 
   LIMIT 1
   `
     .run(pool)
@@ -24,7 +24,7 @@ passport.deserializeUser((username: s.employee.Selectable, done) => {
 passport.use(
   new passportLocal.Strategy((username, password, done) => {
     db.sql<s.employee.SQL, s.employee.Selectable[]>`
-    SELECT ${"name"}, ${"password_hash"} 
+    SELECT ${"id"}, ${"name"}, ${"password_hash"} 
     FROM ${"employee"} 
     WHERE ${"name"} = ${db.param(username)} 
     LIMIT 1`

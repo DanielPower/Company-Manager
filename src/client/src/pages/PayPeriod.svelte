@@ -12,8 +12,14 @@
     TextInput,
   } from "carbon-components-svelte";
 
+  let user = {
+    id: null,
+    name: "",
+  }
+  axios.get("/employees/current").then(({ data }) => {user = data});
+
   let jobs = [];
-  axios.get("/jobs").then(({ data }) => (jobs = data));
+  axios.get("/jobs").then(({ data }) => {jobs = data});
 
   let forms = [];
 
@@ -34,7 +40,7 @@
 <Content>
   <Form>
     <p>Week Ending **/**/**</p>
-    <p>Cory Power</p>
+    <p>{user.name}</p>
     {#each forms as form}
       <payperiodForm>
         <div class="row">
