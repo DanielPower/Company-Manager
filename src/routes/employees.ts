@@ -3,8 +3,8 @@ import * as db from "../zapatos/src";
 import * as s from "../zapatos/schema";
 import { pool } from "../server";
 import bcrypt from "bcrypt";
+import dayjs from "dayjs";
 
-// Add sub-routes
 const employeeRouter = Router();
 
 employeeRouter.get("/", async (_request, response, _next) => {
@@ -51,7 +51,7 @@ employeeRouter.post("/", async (request, response, _next) => {
         .insert("pay_period", [
           {
             id: db.Default,
-            date: new Date(),
+            date: dayjs(employee.start_date).day(0).format("YYYY-MM-DD"),
             employee_id: employee.id,
           },
         ])
