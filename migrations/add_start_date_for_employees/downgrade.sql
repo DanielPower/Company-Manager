@@ -1,0 +1,6 @@
+BEGIN TRANSACTION;
+
+ALTER TABLE "employee"
+	DROP COLUMN "start_date";
+
+COMMIT;

@@ -1,7 +1,5 @@
 - name: "initial_migration"
   description: "Sets up the initial database schema"
-- name: "remove_pay_period"
-  description: "Removes pay period table, adds night_shift value"
 - name: "add_start_date_for_employees"
 - name: "remove_employee_number_in_favor_of_id"
 
