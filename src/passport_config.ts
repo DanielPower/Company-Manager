@@ -12,10 +12,10 @@ passport.serializeUser((user: s.employee.Selectable, done) => {
 
 passport.deserializeUser((id: s.employee.Selectable, done) => {
   db.sql<s.employee.SQL, s.employee.Selectable[]>`
-  SELECT ${"id"} 
-  FROM ${"employee"} 
-  WHERE ${"id"} = ${db.param(id)} 
-  LIMIT 1
+    SELECT ${"id"} 
+    FROM ${"employee"} 
+    WHERE ${"id"} = ${db.param(id)} 
+    LIMIT 1
   `
     .run(pool)
     .then(([user]) => done(null, user));
@@ -24,10 +24,11 @@ passport.deserializeUser((id: s.employee.Selectable, done) => {
 passport.use(
   new passportLocal.Strategy((username, password, done) => {
     db.sql<s.employee.SQL, s.employee.Selectable[]>`
-    SELECT ${"id"}, ${"name"}, ${"password_hash"} 
-    FROM ${"employee"} 
-    WHERE ${"name"} = ${db.param(username)} 
-    LIMIT 1`
+      SELECT ${"id"}, ${"name"}, ${"password_hash"} 
+      FROM ${"employee"} 
+      WHERE ${"name"} = ${db.param(username)} 
+      LIMIT 1
+    `
       .run(pool)
       .then(([user]) => {
         if (!user) {

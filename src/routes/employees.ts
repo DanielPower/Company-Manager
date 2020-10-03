@@ -31,20 +31,38 @@ employeeRouter.post("/", async (request, response, _next) => {
   const { body } = request;
   const passwordHash = await bcrypt.hash("changeme", 10);
 
-  const newEmployee = {
-    id: body.id,
-    name: body.name,
-    password_hash: passwordHash,
-    is_admin: body.isAdmin,
-    start_date: body.startDate,
-  };
-  const employee = await db.sql<
-    s.employee.SQL,
-    s.employee.Selectable
-  >`INSERT INTO ${"employee"} (${db.cols(newEmployee)})
-    VALUES (${db.vals(newEmployee)})`.run(pool);
+  const insertedEmployee = await db.transaction(
+    pool,
+    db.Isolation.Serializable,
+    async (txClient) => {
+      const [employee] = await db
+        .insert("employee", [
+          {
+            id: body.id,
+            name: body.name,
+            password_hash: passwordHash,
+            is_admin: body.isAdmin,
+            start_date: body.startDate,
+          },
+        ])
+        .run(txClient);
 
-  response.send(employee);
+      await db
+        .insert("pay_period", [
+          {
+            id: db.Default,
+            date: new Date(),
+            employee_id: employee.id,
+          },
+        ])
+        .run(txClient);
+
+      return employee;
+    }
+  );
+  console.log(insertedEmployee);
+
+  response.send(insertedEmployee);
 });
 
 export default employeeRouter;

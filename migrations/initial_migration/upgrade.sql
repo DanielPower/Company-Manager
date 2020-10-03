@@ -9,7 +9,7 @@ CREATE TABLE "employee" (
 	PRIMARY KEY("id")
 );
 CREATE TABLE "pay_period" (
-	"id" INT NOT NULL,
+	"id" SERIAL NOT NULL,
 	"date" DATE NOT NULL,
 	"employee_id" INT NOT NULL,
 	PRIMARY KEY("id"),
@@ -22,7 +22,7 @@ CREATE TABLE "job" (
 	PRIMARY KEY("id")
 );
 CREATE TABLE "shift" (
-	"id" INT NOT NULL,
+	"id" SERIAL NOT NULL,
 	"date" DATE NOT NULL,
 	"description" TEXT NOT NULL,
 	"hours" INT NOT NULL,
