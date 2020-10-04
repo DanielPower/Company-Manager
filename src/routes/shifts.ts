@@ -19,4 +19,8 @@ shiftRouter.get("/", async (request, response, _next) => {
   response.send(shifts);
 });
 
+shiftRouter.put("/", async (request, _response, _next) => {
+  console.log(request.body);
+});
+
 export default shiftRouter;

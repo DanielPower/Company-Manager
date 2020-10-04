@@ -7,6 +7,7 @@
     TextInput,
     PasswordInput,
   } from "carbon-components-svelte";
+  import { user } from "../stores";
 
   let username: string;
   let password: string;
@@ -14,11 +15,11 @@
   const submitLogin = () => {
     axios({
       method: "post",
-      url: "/api/authorize", 
-      withCredentials: true, 
+      url: "/api/authorize",
+      withCredentials: true,
       data: { username, password },
       responseType: "json",
-    }).then((res) => console.log(res));
+    }).then((res) => user.set(res.data));
   };
 </script>
 
