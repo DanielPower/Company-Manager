@@ -10,17 +10,16 @@
     SkeletonText,
   } from "carbon-components-svelte";
   import dayjs from "dayjs";
-  import { user } from "../stores";
 
+  let user = {};
   let jobs = [];
   let payPeriod = {};
   let shifts = [];
-  let userValue = null;
 
-  user.subscribe((newValue) => {
-    userValue = newValue;
-  });
-
+  const getUser = async () => {
+    const userResponse = await axios.get("/api/employees/current");
+    user = userResponse.data;
+  };
   const getJobs = async () => {
     const jobsResponse = await axios.get("/api/jobs");
     jobs = jobsResponse.data;
@@ -64,10 +63,15 @@
     ];
   };
 
+  const userPromise = getUser();
   const jobsPromise = getJobs();
   const shiftsPromise = getShifts();
 
-  const dataReadyPromise = Promise.all([jobsPromise, shiftsPromise]);
+  const dataReadyPromise = Promise.all([
+    userPromise,
+    jobsPromise,
+    shiftsPromise,
+  ]);
 </script>
 
 <style>
@@ -108,7 +112,7 @@
     <h3>{user.name}</h3>
     {#each shifts as shift}
       <payPeriodForm>
-        <Select name="Job" labelText={'Job'} bind:selected={shift.job}>
+        <Select name="Job" labelText={'Job'} bind:selected={shift.jobId}>
           {#each jobs as job}
             <SelectItem value={job.id} text={job.name} />
           {/each}
