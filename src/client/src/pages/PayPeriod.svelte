@@ -15,6 +15,7 @@
   let jobs = [];
   let payPeriod = {};
   let shifts = [];
+  let isSaving = false;
 
   const getUser = async () => {
     const userResponse = await axios.get("/api/employees/current");
@@ -26,8 +27,9 @@
   };
 
   const getShifts = async () => {
-    const payPeriodResponse = await axios.get("/api/payperiod");
+    const payPeriodResponse = await axios.get("/api/payperiods");
     payPeriod = payPeriodResponse.data;
+    console.log(payPeriod);
     const shiftsResponse = await axios.get("/api/shifts", {
       params: {
         payPeriodId: payPeriod.id,
@@ -36,15 +38,19 @@
     shifts = shiftsResponse.data;
   };
 
-  const saveShifts = async () =>
+  const saveShifts = async () => {
+    isSaving = true;
     await axios.put("/api/shifts", {
       payPeriodId: payPeriod.id,
       shifts,
     });
+    isSaving = false;
+  };
 
   const submitShifts = async () => {
     await saveShifts();
-    await axios.post("/api/payperiods", {
+    await axios.put("/api/payperiods", {
+      payPeriodId: payPeriod.id,
       isSubmitted: true,
     });
   };
@@ -112,7 +118,11 @@
     <h3>{user.name}</h3>
     {#each shifts as shift}
       <payPeriodForm>
-        <Select name="Job" labelText={'Job'} bind:selected={shift.jobId}>
+        <Select
+          name="Job"
+          labelText={'Job'}
+          selected={shift.jobId}
+          on:change={({ detail }) => (shift.jobId = parseInt(detail))}>
           {#each jobs as job}
             <SelectItem value={job.id} text={job.name} />
           {/each}
@@ -120,10 +130,16 @@
         <TextArea bind:value={shift.description} labelText={'Description'} />
         <row>
           <rowItem class="fillWidth">
-            <TextInput bind:value={shift.hoursWorked} labelText={'Worked'} />
+            <TextInput
+              type="number"
+              bind:value={shift.hoursWorked}
+              labelText={'Worked'} />
           </rowItem>
           <rowItem class="fillWidth">
-            <TextInput bind:value={shift.hoursBanked} labelText={'Banked'} />
+            <TextInput
+              type="number"
+              bind:value={shift.hoursBanked}
+              labelText={'Banked'} />
           </rowItem>
         </row>
       </payPeriodForm>
@@ -134,8 +150,25 @@
       <Button size="field" kind="secondary" on:click={addShift}>Add Job</Button>
     </rowItem>
     <rowItem>
-      <Button size="field" kind="secondary" on:click={saveShifts}>Save</Button>
+      <Button
+        size="field"
+        kind="secondary"
+        disabled={isSaving}
+        on:click={() => {
+          saveShifts();
+          getShifts();
+        }}>
+        Save
+      </Button>
     </rowItem>
   </row>
-  <Button size="field" on:click={submitShifts}>Submit</Button>
+  <Button
+    size="field"
+    disabled={isSaving}
+    on:click={() => {
+      submitShifts();
+      getShifts();
+    }}>
+    Submit
+  </Button>
 </Content>

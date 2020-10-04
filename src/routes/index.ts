@@ -10,7 +10,7 @@ const router = Router();
 router.use("/authorize", authorizeRouter);
 router.use("/jobs", jobRouter);
 router.use("/employees", employeesRouter);
-router.use("/payperiod", payperiodRouter);
+router.use("/payperiods", payperiodRouter);
 router.use("/shifts", shiftRouter);
 
 // Export the base-router

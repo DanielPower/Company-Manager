@@ -19,7 +19,7 @@ jobRouter.post("/", async (request, response, _next) => {
   const newJob = {
     id: body.jobNumber,
     name: body.name,
-    hour_type: body.hourType,
+    hourType: body.hourType,
   };
 
   const job = await db.sql<

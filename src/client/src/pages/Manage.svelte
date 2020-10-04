@@ -51,7 +51,7 @@
   const jobTableHeaders = [
     { key: "id", value: "Job Number" },
     { key: "name", value: "Job" },
-    { key: "hour_type", value: "Hour type" },
+    { key: "hourType", value: "Hour type" },
   ];
 
   const getEmployees = () =>
@@ -76,7 +76,6 @@
   const getJobs = () =>
     axios.get("/api/jobs").then(({ data }) => {
       jobs = data;
-      console.log(jobs);
     });
 
   const submitJob = () =>
