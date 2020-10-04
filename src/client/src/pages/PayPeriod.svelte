@@ -1,69 +1,107 @@
 <script>
   import axios from "axios";
   import {
-    Button,
     Content,
+    Button,
     Form,
-    DatePicker,
-    DatePickerInput,
     Select,
     SelectItem,
     TextArea,
     TextInput,
+    SkeletonText,
   } from "carbon-components-svelte";
+  import dayjs from "dayjs";
 
-  let user = {
-    id: null,
-    name: "",
-  }
-  axios.get("/employees/current").then(({ data }) => {user = data});
-
+  let user = {};
   let jobs = [];
-  axios.get("/jobs").then(({ data }) => {jobs = data});
+  let payPeriod = {};
+  let shifts = [];
 
-  let forms = [];
-
-  const addForm = () => {
-    forms = [
-      ...forms,
-      {
-        date: "",
-        name: "",
-        description: "",
-        workedHours: "",
-        bankedHours: "",
-      },
-    ];
+  const getUser = async () => {
+    const userResponse = await axios.get("/api/employees/current");
+    user = userResponse.data;
   };
+  const getJobs = async () => {
+    const jobsResponse = await axios.get("/api/jobs");
+    jobs = jobsResponse.data;
+  };
+
+  const getPayPeriod = async () => {
+    const payPeriodResponse = await axios.get("/api/payperiod");
+    payPeriod = payPeriodResponse.data;
+  };
+
+  const getShifts = async (payPeriodId) => {
+    const shiftsResponse = await axios.get("/api/shifts", {
+      payPeriodId,
+    });
+    shifts = shiftsResponse.data;
+  };
+
+  const userPromise = getUser();
+  const jobsPromise = getJobs();
+  const shiftsPromise = getPayPeriod().then(() => getShifts());
+
+  const dataReadyPromise = Promise.all([
+    userPromise,
+    jobsPromise,
+    shiftsPromise,
+  ]);
 </script>
+
+<style>
+  row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  rowItem {
+    width: 100%;
+  }
+
+  rowItem:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  rowItem:not(:first-child) {
+    margin-left: 1rem;
+  }
+
+  payPeriodForm {
+    margin-bottom: 2rem;
+    display: block;
+  }
+</style>
 
 <Content>
   <Form>
-    <p>Week Ending **/**/**</p>
-    <p>{user.name}</p>
-    {#each forms as form}
-      <payperiodForm>
-        <div class="row">
-          <DatePicker
-            id="date-picker"
-            bind:value={form.date}
-            datePickerType={'single'}>
-            <DatePickerInput
-              id="date-picker-input"
-              placeholder="mm/dd/yyyy"
-              labelText={'Date'} />
-          </DatePicker>
-          <Select name="Job" labelText={'Job'}>
+    {#await dataReadyPromise}
+      <SkeletonText />
+      <SkeletonText />
+    {:then}
+      <h2>Week Ending {dayjs(payPeriod.date).day(6).format('YYYY-MM-DD')}</h2>
+      <h3>{user.name}</h3>
+      {#each shifts as shift}
+        <payPeriodForm>
+          <h4>{shift.day}</h4>
+          <Select name="Job" labelText={'Job'} bind:selected={shift.job}>
             {#each jobs as job}
-              <SelectItem value={job.name} text={job.name} />
+              <SelectItem value={job.id} text={job.name} />
             {/each}
           </Select>
-        </div>
-        <TextArea bind:value={form.description} labelText={'Description'} />
-        <TextInput bind:value={form.workedHours} labelText={'Worked'} />
-        <TextInput bind:value={form.bankedHours} labelText={'Banked'} />
-      </payperiodForm>
-    {/each}
-    <Button on:click={addForm}>Add shift</Button>
+          <TextArea bind:value={shift.description} labelText={'Description'} />
+          <row>
+            <rowItem>
+              <TextInput bind:value={shift.workedHours} labelText={'Worked'} />
+            </rowItem>
+            <rowItem>
+              <TextInput bind:value={shift.bankedHours} labelText={'Banked'} />
+            </rowItem>
+          </row>
+        </payPeriodForm>
+      {/each}
+    {/await}
   </Form>
+  <Button>Add Job</Button>
 </Content>

@@ -57,7 +57,7 @@
   const getEmployees = () =>
     axios({
       method: "get",
-      url: "/employees",
+      url: "/api/employees",
       withCredentials: true,
     }).then(({ data }) => {
       employees = data;
@@ -65,7 +65,7 @@
 
   const submitEmployee = () =>
     axios
-      .post("/employees", {
+      .post("/api/employees", {
         id: parseInt(employeeNumber),
         name: employeeName,
         isAdmin: employeeIsAdmin,
@@ -74,14 +74,14 @@
       .then(getEmployees);
 
   const getJobs = () =>
-    axios.get("/jobs").then(({ data }) => {
+    axios.get("/api/jobs").then(({ data }) => {
       jobs = data;
       console.log(jobs);
     });
 
   const submitJob = () =>
     axios
-      .post("/jobs", {
+      .post("/api/jobs", {
         jobNumber: parseInt(jobNumber),
         name: jobName,
         hourType: jobHourTypes[jobHourIndex].value,

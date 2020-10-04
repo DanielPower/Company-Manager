@@ -38,11 +38,11 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((req: Request, _res: Response, next: NextFunction) => {
   console.log("user", req.user);
   next();
 });
-app.use("/", BaseRouter);
+app.use("/api", BaseRouter);
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   logger.error(err.message, err);
   return res.status(StatusCodes.BAD_REQUEST).json({

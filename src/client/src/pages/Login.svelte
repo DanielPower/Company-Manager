@@ -14,7 +14,7 @@
   const submitLogin = () => {
     axios({
       method: "post",
-      url: "/login", 
+      url: "/api/login", 
       withCredentials: true, 
       data: { username, password },
       responseType: "json",
