@@ -15,6 +15,11 @@
   let jobs = [];
   let payPeriod = {};
   let shifts = [];
+  let userValue = null;
+
+  user.subscribe((newValue) => {
+    userValue = newValue;
+  });
 
   const getJobs = async () => {
     const jobsResponse = await axios.get("/api/jobs");
