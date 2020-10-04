@@ -6,7 +6,6 @@ import passportLocal from "passport-local";
 import bcrypt from "bcrypt";
 
 passport.serializeUser((user: s.employee.Selectable, done) => {
-  console.log("serialize", user);
   done(null, user.id);
 });
 
@@ -24,7 +23,7 @@ passport.deserializeUser((id: s.employee.Selectable, done) => {
 passport.use(
   new passportLocal.Strategy((username, password, done) => {
     db.sql<s.employee.SQL, s.employee.Selectable[]>`
-      SELECT ${"id"}, ${"name"}, ${"password_hash"} 
+      SELECT ${"id"}, ${"name"}, ${"passwordHash"} 
       FROM ${"employee"} 
       WHERE ${"name"} = ${db.param(username)} 
       LIMIT 1
@@ -34,7 +33,7 @@ passport.use(
         if (!user) {
           return done(null, false, { message: "User not found" });
         }
-        bcrypt.compare(password, user.password_hash).then((passwordValid) => {
+        bcrypt.compare(password, user.passwordHash).then((passwordValid) => {
           if (!passwordValid) {
             return done(null, false, { message: "Incorrect password" });
           }

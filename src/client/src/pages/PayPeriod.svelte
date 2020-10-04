@@ -26,21 +26,21 @@
     jobs = jobsResponse.data;
   };
 
-  const getPayPeriod = async () => {
+  const getShifts = async () => {
     const payPeriodResponse = await axios.get("/api/payperiod");
     payPeriod = payPeriodResponse.data;
-  };
-
-  const getShifts = async (payPeriodId) => {
     const shiftsResponse = await axios.get("/api/shifts", {
-      payPeriodId,
+      params: {
+        payPeriodId: payPeriod.id,
+      },
     });
+    console.log(shiftsResponse);
     shifts = shiftsResponse.data;
   };
 
   const userPromise = getUser();
   const jobsPromise = getJobs();
-  const shiftsPromise = getPayPeriod().then(() => getShifts());
+  const shiftsPromise = getShifts();
 
   const dataReadyPromise = Promise.all([
     userPromise,
@@ -84,7 +84,6 @@
       <h3>{user.name}</h3>
       {#each shifts as shift}
         <payPeriodForm>
-          <h4>{shift.day}</h4>
           <Select name="Job" labelText={'Job'} bind:selected={shift.job}>
             {#each jobs as job}
               <SelectItem value={job.id} text={job.name} />
@@ -93,10 +92,10 @@
           <TextArea bind:value={shift.description} labelText={'Description'} />
           <row>
             <rowItem>
-              <TextInput bind:value={shift.workedHours} labelText={'Worked'} />
+              <TextInput bind:value={shift.hoursWorked} labelText={'Worked'} />
             </rowItem>
             <rowItem>
-              <TextInput bind:value={shift.bankedHours} labelText={'Banked'} />
+              <TextInput bind:value={shift.hoursBanked} labelText={'Banked'} />
             </rowItem>
           </row>
         </payPeriodForm>

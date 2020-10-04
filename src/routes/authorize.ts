@@ -2,8 +2,8 @@ import { Router } from "express";
 import passport from "../passport_config";
 
 // Add sub-routes
-const loginRouter = Router();
-loginRouter.post("/", (req, res, next) => {
+const authorizeRouter = Router();
+authorizeRouter.post("/", (req, res, next) => {
   passport.authenticate("local", (err, user) => {
     if (err) {
       return next(err);
@@ -16,11 +16,10 @@ loginRouter.post("/", (req, res, next) => {
       if (err) {
         throw err;
       }
-      console.log("login", req.user);
       res.writeHead(200, { "Content-Type": "application/json" });
     });
     return res.end();
   })(req, res, next);
 });
 
-export default loginRouter;
+export default authorizeRouter;

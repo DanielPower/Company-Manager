@@ -34,16 +34,16 @@ export declare namespace employee {
   export interface Selectable {
     id: number;
     name: string;
-    password_hash: string;
-    is_admin: boolean;
-    start_date: Date;
+    passwordHash: string;
+    isAdmin: boolean;
+    startDate: Date;
   }
   export interface Insertable {
     id: number | Parameter<number> | SQLFragment;
     name: string | Parameter<string> | SQLFragment;
-    password_hash: string | Parameter<string> | SQLFragment;
-    is_admin: boolean | Parameter<boolean> | SQLFragment;
-    start_date: Date | Parameter<Date> | DateString | SQLFragment;
+    passwordHash: string | Parameter<string> | SQLFragment;
+    isAdmin: boolean | Parameter<boolean> | SQLFragment;
+    startDate: Date | Parameter<Date> | DateString | SQLFragment;
   }
   export interface Updatable extends Partial<Insertable> { }
   export type Whereable = { [K in keyof Insertable]?: Exclude<Insertable[K] | ParentColumn, null | DefaultType> };
@@ -64,12 +64,12 @@ export declare namespace job {
   export interface Selectable {
     id: number;
     name: string;
-    hour_type: number;
+    hourType: number;
   }
   export interface Insertable {
     id: number | Parameter<number> | SQLFragment;
     name: string | Parameter<string> | SQLFragment;
-    hour_type: number | Parameter<number> | SQLFragment;
+    hourType: number | Parameter<number> | SQLFragment;
   }
   export interface Updatable extends Partial<Insertable> { }
   export type Whereable = { [K in keyof Insertable]?: Exclude<Insertable[K] | ParentColumn, null | DefaultType> };
@@ -85,17 +85,19 @@ export declare namespace job {
   export type SQL = SQLExpression | SQLExpression[];
 }
 
-export declare namespace pay_period {
-  export type Table = 'pay_period';
+export declare namespace payPeriod {
+  export type Table = 'payPeriod';
   export interface Selectable {
     id: number;
     date: Date;
-    employee_id: number;
+    employeeId: number;
+    isSubmitted: boolean | null;
   }
   export interface Insertable {
     id?: number | Parameter<number> | DefaultType | SQLFragment;
     date: Date | Parameter<Date> | DateString | SQLFragment;
-    employee_id: number | Parameter<number> | SQLFragment;
+    employeeId: number | Parameter<number> | SQLFragment;
+    isSubmitted?: boolean | Parameter<boolean> | null | DefaultType | SQLFragment;
   }
   export interface Updatable extends Partial<Insertable> { }
   export type Whereable = { [K in keyof Insertable]?: Exclude<Insertable[K] | ParentColumn, null | DefaultType> };
@@ -104,7 +106,7 @@ export declare namespace pay_period {
     Date[] extends Selectable[K] ? Exclude<Selectable[K], Date[]> | DateString[] :
     Selectable[K]
   };
-  export type UniqueIndex = 'pay_period_pkey';
+  export type UniqueIndex = 'payPeriod_pkey';
   export type Column = keyof Selectable;
   export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
   export type SQLExpression = GenericSQLExpression | Table | Whereable | Column | ColumnNames<Updatable | (keyof Updatable)[]> | ColumnValues<Updatable>;
@@ -117,21 +119,21 @@ export declare namespace shift {
     id: number;
     date: Date;
     description: string;
-    hours: number;
-    banked_hours: number;
-    night_shift: boolean;
-    job_id: number;
-    pay_period_id: number;
+    hoursWorked: number;
+    hoursBanked: number;
+    nightShift: boolean;
+    jobId: number;
+    payPeriodId: number;
   }
   export interface Insertable {
     id?: number | Parameter<number> | DefaultType | SQLFragment;
     date: Date | Parameter<Date> | DateString | SQLFragment;
     description: string | Parameter<string> | SQLFragment;
-    hours: number | Parameter<number> | SQLFragment;
-    banked_hours: number | Parameter<number> | SQLFragment;
-    night_shift: boolean | Parameter<boolean> | SQLFragment;
-    job_id: number | Parameter<number> | SQLFragment;
-    pay_period_id: number | Parameter<number> | SQLFragment;
+    hoursWorked: number | Parameter<number> | SQLFragment;
+    hoursBanked: number | Parameter<number> | SQLFragment;
+    nightShift: boolean | Parameter<boolean> | SQLFragment;
+    jobId: number | Parameter<number> | SQLFragment;
+    payPeriodId: number | Parameter<number> | SQLFragment;
   }
   export interface Updatable extends Partial<Insertable> { }
   export type Whereable = { [K in keyof Insertable]?: Exclude<Insertable[K] | ParentColumn, null | DefaultType> };
@@ -149,62 +151,62 @@ export declare namespace shift {
 
 /* === cross-table types === */
 
-export type Table = employee.Table | job.Table | pay_period.Table | shift.Table;
-export type Selectable = employee.Selectable | job.Selectable | pay_period.Selectable | shift.Selectable;
-export type Whereable = employee.Whereable | job.Whereable | pay_period.Whereable | shift.Whereable;
-export type Insertable = employee.Insertable | job.Insertable | pay_period.Insertable | shift.Insertable;
-export type Updatable = employee.Updatable | job.Updatable | pay_period.Updatable | shift.Updatable;
-export type UniqueIndex = employee.UniqueIndex | job.UniqueIndex | pay_period.UniqueIndex | shift.UniqueIndex;
-export type Column = employee.Column | job.Column | pay_period.Column | shift.Column;
-export type AllTables = [employee.Table, job.Table, pay_period.Table, shift.Table];
+export type Table = employee.Table | job.Table | payPeriod.Table | shift.Table;
+export type Selectable = employee.Selectable | job.Selectable | payPeriod.Selectable | shift.Selectable;
+export type Whereable = employee.Whereable | job.Whereable | payPeriod.Whereable | shift.Whereable;
+export type Insertable = employee.Insertable | job.Insertable | payPeriod.Insertable | shift.Insertable;
+export type Updatable = employee.Updatable | job.Updatable | payPeriod.Updatable | shift.Updatable;
+export type UniqueIndex = employee.UniqueIndex | job.UniqueIndex | payPeriod.UniqueIndex | shift.UniqueIndex;
+export type Column = employee.Column | job.Column | payPeriod.Column | shift.Column;
+export type AllTables = [employee.Table, job.Table, payPeriod.Table, shift.Table];
 
 
 export type SelectableForTable<T extends Table> = {
   employee: employee.Selectable;
   job: job.Selectable;
-  pay_period: pay_period.Selectable;
+  payPeriod: payPeriod.Selectable;
   shift: shift.Selectable;
 }[T];
 
 export type WhereableForTable<T extends Table> = {
   employee: employee.Whereable;
   job: job.Whereable;
-  pay_period: pay_period.Whereable;
+  payPeriod: payPeriod.Whereable;
   shift: shift.Whereable;
 }[T];
 
 export type InsertableForTable<T extends Table> = {
   employee: employee.Insertable;
   job: job.Insertable;
-  pay_period: pay_period.Insertable;
+  payPeriod: payPeriod.Insertable;
   shift: shift.Insertable;
 }[T];
 
 export type UpdatableForTable<T extends Table> = {
   employee: employee.Updatable;
   job: job.Updatable;
-  pay_period: pay_period.Updatable;
+  payPeriod: payPeriod.Updatable;
   shift: shift.Updatable;
 }[T];
 
 export type UniqueIndexForTable<T extends Table> = {
   employee: employee.UniqueIndex;
   job: job.UniqueIndex;
-  pay_period: pay_period.UniqueIndex;
+  payPeriod: payPeriod.UniqueIndex;
   shift: shift.UniqueIndex;
 }[T];
 
 export type ColumnForTable<T extends Table> = {
   employee: employee.Column;
   job: job.Column;
-  pay_period: pay_period.Column;
+  payPeriod: payPeriod.Column;
   shift: shift.Column;
 }[T];
 
 export type SQLForTable<T extends Table> = {
   employee: employee.SQL;
   job: job.SQL;
-  pay_period: pay_period.SQL;
+  payPeriod: payPeriod.SQL;
   shift: shift.SQL;
 }[T];
 

@@ -20,7 +20,7 @@ employeeRouter.get("/current", async (request, response, _next) => {
     return response.status(403).send();
   }
   const [employee] = await db.sql<s.employee.SQL, s.employee.Selectable[]>`
-    SELECT ${"id"}, ${"name"}, ${"is_admin"}, ${"start_date"}
+    SELECT ${"id"}, ${"name"}, ${"isAdmin"}, ${"startDate"}
     FROM ${"employee"}
     WHERE ${"id"} = ${db.param((request.user as s.employee.Selectable).id)}
     LIMIT 1`.run(pool);
@@ -28,7 +28,7 @@ employeeRouter.get("/current", async (request, response, _next) => {
 });
 
 employeeRouter.post("/", async (request, response, _next) => {
-  const { body } = request;
+  const { id, name, isAdmin, startDate } = request.body;
   const passwordHash = await bcrypt.hash("changeme", 10);
 
   const insertedEmployee = await db.transaction(
@@ -38,21 +38,21 @@ employeeRouter.post("/", async (request, response, _next) => {
       const [employee] = await db
         .insert("employee", [
           {
-            id: body.id,
-            name: body.name,
-            password_hash: passwordHash,
-            is_admin: body.isAdmin,
-            start_date: body.startDate,
+            id,
+            name,
+            passwordHash,
+            isAdmin,
+            startDate,
           },
         ])
         .run(txClient);
 
       await db
-        .insert("pay_period", [
+        .insert("payPeriod", [
           {
             id: db.Default,
-            date: dayjs(employee.start_date).day(0).format("YYYY-MM-DD"),
-            employee_id: employee.id,
+            date: dayjs(employee.startDate).day(0).format("YYYY-MM-DD"),
+            employeeId: employee.id,
           },
         ])
         .run(txClient);
@@ -60,7 +60,6 @@ employeeRouter.post("/", async (request, response, _next) => {
       return employee;
     }
   );
-  console.log(insertedEmployee);
 
   response.send(insertedEmployee);
 });

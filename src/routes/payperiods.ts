@@ -13,15 +13,15 @@ payperiodRouter.get("/", async (request, response, _next) => {
     return response.status(403).send();
   }
   const [payPeriod] = await db.sql<
-    s.pay_period.SQL | s.employee.SQL,
-    s.pay_period.Selectable[]
+    s.payPeriod.SQL | s.employee.SQL,
+    s.payPeriod.Selectable[]
   >`
-    SELECT * FROM ${"pay_period"}
+    SELECT ${"payPeriod"}.* FROM ${"payPeriod"}
     INNER JOIN ${"employee"}
-    ON ${"pay_period"}.${"employee_id"} = ${"employee"}.${"id"}
-    WHERE ${"pay_period"}.${"employee_id"} = ${db.param(user.id)}
-    AND ${"pay_period"}.${"employee_id"} = ${"employee"}.${"id"}
-    ORDER BY ${"pay_period"}.${"date"}
+    ON ${"payPeriod"}.${"employeeId"} = ${"employee"}.${"id"}
+    WHERE ${"payPeriod"}.${"employeeId"} = ${db.param(user.id)}
+    AND ${"payPeriod"}.${"employeeId"} = ${"employee"}.${"id"}
+    ORDER BY ${"payPeriod"}.${"date"}
     LIMIT 1
   `.run(pool);
 

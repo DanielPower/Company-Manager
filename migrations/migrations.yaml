@@ -1,6 +1,1 @@
 - name: "initial_migration"
-  description: "Sets up the initial database schema"
-- name: "add_start_date_for_employees"
-- name: "remove_employee_number_in_favor_of_id"
-- name: "add_is_submitted_field_to_pay_period"
-

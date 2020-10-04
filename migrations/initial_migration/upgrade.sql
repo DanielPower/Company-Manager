@@ -2,37 +2,38 @@ BEGIN TRANSACTION;
 
 CREATE TABLE "employee" (
 	"id" INT NOT NULL,
-	"employee_number" INT NOT NULL,
 	"name" TEXT NOT NULL,
-	"password_hash" TEXT NOT NULL,
-	"is_admin" BOOLEAN NOT NULL,
+	"passwordHash" TEXT NOT NULL,
+	"isAdmin" BOOLEAN NOT NULL,
+	"startDate" DATE NOT NULL,
 	PRIMARY KEY("id")
 );
-CREATE TABLE "pay_period" (
+CREATE TABLE "payPeriod" (
 	"id" SERIAL NOT NULL,
 	"date" DATE NOT NULL,
-	"employee_id" INT NOT NULL,
+	"employeeId" INT NOT NULL,
+	"isSubmitted" BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY("id"),
-	FOREIGN KEY("employee_id") REFERENCES "employee"("id")
+	FOREIGN KEY("employeeId") REFERENCES "employee"("id")
 );
 CREATE TABLE "job" (
 	"id" INT NOT NULL,
 	"name" TEXT NOT NULL,
-	"hour_type" INT NOT NULL,
+	"hourType" INT NOT NULL,
 	PRIMARY KEY("id")
 );
 CREATE TABLE "shift" (
 	"id" SERIAL NOT NULL,
 	"date" DATE NOT NULL,
 	"description" TEXT NOT NULL,
-	"hours" INT NOT NULL,
-	"banked_hours" INT NOT NULL,
-	"night_shift" BOOLEAN NOT NULL,
-	"job_id" INT NOT NULL,
-	"pay_period_id" INT NOT NULL,
+	"hoursWorked" INT NOT NULL,
+	"hoursBanked" INT NOT NULL,
+	"nightShift" BOOLEAN NOT NULL,
+	"jobId" INT NOT NULL,
+	"payPeriodId" INT NOT NULL,
 	PRIMARY KEY("id"),
-	FOREIGN KEY("job_id") REFERENCES "job"("id"),
-	FOREIGN KEY("pay_period_id") REFERENCES "pay_period"("id")
+	FOREIGN KEY("jobId") REFERENCES "job"("id"),
+	FOREIGN KEY("payPeriodId") REFERENCES "payPeriod"("id")
 );
 
 COMMIT;
