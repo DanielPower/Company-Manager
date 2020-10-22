@@ -1,24 +1,32 @@
 import { Router } from "express";
+import * as db from "../zapatos/src";
+import { pool } from "../server";
 import passport from "../passport_config";
 
 // Add sub-routes
 const authorizeRouter = Router();
 authorizeRouter.post("/", (req, res, next) => {
-  passport.authenticate("local", (err, user) => {
+  passport.authenticate("local", async (err, user) => {
     if (err) {
       return next(err);
     }
     if (!user) {
-      res.writeHead(401, { "Content-Type": "application/json" });
+      res.status(401).send();
       return res.end();
     }
-    req.logIn(user, (err) => {
+    req.logIn(user, async (err) => {
       if (err) {
         throw err;
       }
-      res.writeHead(200, { "Content-Type": "application/json" });
+      const employee = await db
+        .selectExactlyOne(
+          "employee",
+          { id: user.id },
+          { columns: ["id", "name", "isAdmin", "startDate"] }
+        )
+        .run(pool);
+      res.json(employee);
     });
-    return res.end();
   })(req, res, next);
 });
 

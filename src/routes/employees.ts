@@ -16,14 +16,20 @@ employeeRouter.get("/", async (_request, response, _next) => {
 });
 
 employeeRouter.get("/current", async (request, response, _next) => {
+  const user = request.user as s.employee.Selectable;
   if (!request.user) {
-    return response.status(403).send();
+    return response.json(null);
   }
-  const [employee] = await db.sql<s.employee.SQL, s.employee.Selectable[]>`
-    SELECT ${"id"}, ${"name"}, ${"isAdmin"}, ${"startDate"}
-    FROM ${"employee"}
-    WHERE ${"id"} = ${db.param((request.user as s.employee.Selectable).id)}
-    LIMIT 1`.run(pool);
+  const employee = await db
+    .selectExactlyOne(
+      "employee",
+      {
+        id: user.id,
+      },
+      { columns: ["id", "name", "isAdmin", "startDate"] }
+    )
+    .run(pool);
+  console.log(employee);
   response.json(employee);
 });
 
@@ -33,18 +39,24 @@ employeeRouter.post("/", async (request, response, _next) => {
 
   const insertedEmployee = await db.transaction(
     pool,
-    db.Isolation.Serializable,
+    db.IsolationLevel.Serializable,
     async (txClient) => {
       const [employee] = await db
-        .insert("employee", [
+        .insert(
+          "employee",
+          [
+            {
+              id,
+              name,
+              passwordHash,
+              isAdmin,
+              startDate,
+            },
+          ],
           {
-            id,
-            name,
-            passwordHash,
-            isAdmin,
-            startDate,
-          },
-        ])
+            returning: ["id", "name", "isAdmin", "startDate"],
+          }
+        )
         .run(txClient);
 
       await db
