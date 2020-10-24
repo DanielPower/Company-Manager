@@ -1,7 +1,7 @@
 <script>
   import { Router, Route } from "svelte-routing";
   import { Header } from "carbon-components-svelte";
-  import { Login, PayPeriod, CreateUser } from "./pages";
+  import { Login, PayPeriod } from "./pages";
   import Manage from "./pages/Manage.svelte";
 </script>
 
@@ -15,8 +15,5 @@
   </Route>
   <Route path="payperiod">
     <PayPeriod />
-  </Route>
-  <Route path="createuser">
-    <CreateUser />
   </Route>
 </Router>
