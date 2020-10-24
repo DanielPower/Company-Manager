@@ -8,6 +8,9 @@
     PasswordInput,
   } from "carbon-components-svelte";
 
+  let username;
+  let password;
+
   const submitLogin = () => {
     axios({
       method: "post",
