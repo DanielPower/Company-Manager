@@ -3,13 +3,10 @@
   import {
     Content,
     Button,
-    Select,
-    SelectItem,
-    TextArea,
-    TextInput,
     SkeletonText,
   } from "carbon-components-svelte";
   import dayjs from "dayjs";
+  import ShiftForm from "../components/ShiftForm.svelte";
 
   let user = {};
   let jobs = [];
@@ -100,10 +97,6 @@
     display: block;
   }
 
-  .fillWidth {
-    width: 100%;
-  }
-
   .marginBelow {
     margin-bottom: 1rem;
   }
@@ -118,30 +111,7 @@
     <h3>{user.name}</h3>
     {#each shifts as shift}
       <payPeriodForm>
-        <Select
-          name="Job"
-          labelText={'Job'}
-          selected={shift.jobId}
-          on:change={({ detail }) => (shift.jobId = parseInt(detail))}>
-          {#each jobs as job}
-            <SelectItem value={job.id} text={job.name} />
-          {/each}
-        </Select>
-        <TextArea bind:value={shift.description} labelText={'Description'} />
-        <row>
-          <rowItem class="fillWidth">
-            <TextInput
-              type="number"
-              bind:value={shift.hoursWorked}
-              labelText={'Worked'} />
-          </rowItem>
-          <rowItem class="fillWidth">
-            <TextInput
-              type="number"
-              bind:value={shift.hoursBanked}
-              labelText={'Banked'} />
-          </rowItem>
-        </row>
+      <ShiftForm {shift} {jobs} />
       </payPeriodForm>
     {/each}
   {/await}
